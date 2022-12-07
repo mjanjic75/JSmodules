@@ -336,12 +336,12 @@ function filterData() {
         }
     }
     if (tmpString != "") {
-        console.log(tmpString);
+        //console.log(tmpString);
         notebookDataObject.innerHTML = tmpString;
     }
     else {
         tmpString = `<div class="display-1">Nema takvih laptopova!</div>`;
-        console.log(tmpString);
+        //console.log(tmpString);
         notebookDataObject.innerHTML = tmpString;
     }
 }
