@@ -3,6 +3,10 @@
 // console.log(notebookData);
 // // JavaScript is a "hoisting" programming language
 
+document.body.onload = function(){
+    filterData();
+};
+
 var notebookDataObject = document.getElementById("notebookData");
 
 var notebookData = [
