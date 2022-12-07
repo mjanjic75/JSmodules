@@ -1,5 +1,3 @@
-import notebookData from './modules/myData.js';
-
 window.addEventListener("load", filterData);
 
 var notebookDataObject = document.getElementById("notebookData");
@@ -11,25 +9,32 @@ var notOnDiscountChecked = document.getElementById('notOnDiscount');
 notOnDiscountChecked.addEventListener('click', filterData);
 
 function filterData() {
-    var tmpString = "";
+    //fetch('http://localhost:3000/notebookData') // ako se koristi json-server... #1
+    fetch('./js/modules/myData.json')   // relativna putanja u odnosu na HTML dokument!!!
+        .then(response => response.json())
+        .then(myJSON => {   // #1 pošto vraća niz objekata, može se umesto myJSON staviti notebookData #2
+            let notebookData = myJSON.notebookData  // #2 tada je ovaj red suvišan
+            // console.log(notebookData);
+            var tmpString = "";
 
-    for (let i = 0; i < notebookData.length; i++) {
-        if (onDiscountChecked.checked & notebookData[i].PriceOld != notebookData[i].PriceNew) {
-            tmpString += createHTMLData(notebookData[i]);
-        }
-        else if (notOnDiscountChecked.checked & notebookData[i].PriceOld == notebookData[i].PriceNew) {
-            tmpString += createHTMLData(notebookData[i]);
-        }
-    }
-    if (tmpString != "") {
-        //console.log(tmpString);
-        notebookDataObject.innerHTML = tmpString;
-    }
-    else {
-        tmpString = `<div class="display-1">Nema takvih laptopova!</div>`;
-        //console.log(tmpString);
-        notebookDataObject.innerHTML = tmpString;
-    }
+            for (let i = 0; i < notebookData.length; i++) {
+                if (onDiscountChecked.checked & notebookData[i].PriceOld != notebookData[i].PriceNew) {
+                    tmpString += createHTMLData(notebookData[i]);
+                }
+                else if (notOnDiscountChecked.checked & notebookData[i].PriceOld == notebookData[i].PriceNew) {
+                    tmpString += createHTMLData(notebookData[i]);
+                }
+            }
+            if (tmpString != "") {
+                //console.log(tmpString);
+                notebookDataObject.innerHTML = tmpString;
+            }
+            else {
+                tmpString = `<div class="display-1">Nema takvih laptopova!</div>`;
+                //console.log(tmpString);
+                notebookDataObject.innerHTML = tmpString;
+            }
+        });
 }
 
 function createHTMLData(notebookItem) {
@@ -47,7 +52,7 @@ function createHTMLData(notebookItem) {
             <p class="card-text">Rezolucija: ${notebookItem.ScreenResolution}</p>
             <p class="card-text">Tip ekrana: ${notebookItem.ScreenType}</p>
             <p class="card-text">Grafička: ${notebookItem.Graphics}</p>
-            <p class="card-text">Cena: ${priceMarkup(notebookItem.PriceOld,notebookItem.PriceNew)}</p>
+            <p class="card-text">Cena: ${priceMarkup(notebookItem.PriceOld, notebookItem.PriceNew)}</p>
         </div>
         <div class="card-footer text-center">
             <button type="button" class="btn btn-lg btn-primary">Buy this item!</button>
@@ -56,7 +61,7 @@ function createHTMLData(notebookItem) {
     </div>`;
 }
 
-function priceMarkup(lowerPrice,higherPrice) {
+function priceMarkup(lowerPrice, higherPrice) {
     // if (lowerPrice == higherPrice) {
     //     return lowerPrice;
     // }
